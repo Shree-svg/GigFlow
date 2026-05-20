@@ -35,6 +35,10 @@ export const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPass, setShowPass] = useState(false);
+  const [showApiConfig, setShowApiConfig] = useState(false);
+  const [apiUrl, setApiUrl] = useState(
+    localStorage.getItem('VITE_API_URL') || import.meta.env.VITE_API_URL || 'http://localhost:5001/api'
+  );
 
   const { login, register } = useAuth();
   const navigate = useNavigate();
@@ -51,7 +55,15 @@ export const AuthPage = () => {
       else await register(form.name, form.email, form.password, form.role);
       navigate('/dashboard');
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Authentication failed');
+      const errMsg = err instanceof Error ? err.message : 'Authentication failed';
+      setError(errMsg);
+      
+      const isNetErr = errMsg.toLowerCase().includes('network') || 
+                       errMsg.toLowerCase().includes('cors') || 
+                       errMsg.toLowerCase().includes('failed to fetch');
+      if (isNetErr) {
+        setShowApiConfig(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -74,7 +86,15 @@ export const AuthPage = () => {
         <div className="glass-panel rounded-xl overflow-hidden shadow-[0_0_60px_rgba(0,245,255,0.06)]">
 
           {/* Header */}
-          <div className="p-6 border-b border-primary-container/10 text-center">
+          <div className="p-6 border-b border-primary-container/10 text-center relative">
+            <button
+              type="button"
+              onClick={() => setShowApiConfig((p) => !p)}
+              className="absolute right-4 top-4 text-on-surface-variant hover:text-primary-container transition-colors"
+              title="Configure API Connection"
+            >
+              <span className="material-symbols-outlined text-sm">settings</span>
+            </button>
             <motion.div
               className="flex items-center justify-center gap-3 mb-3"
               initial={{ opacity: 0, y: -10 }}
@@ -151,10 +171,66 @@ export const AuthPage = () => {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="flex items-center gap-2 p-3 rounded-lg bg-error-container/20 border border-error/30 text-error font-hanken text-sm"
+                    className="flex flex-col gap-2 p-3 rounded-lg bg-error-container/20 border border-error/30 text-error font-hanken text-sm"
                   >
-                    <span className="material-symbols-outlined text-sm">error</span>
-                    {error}
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-sm">error</span>
+                      <span className="flex-1">{error}</span>
+                      {!showApiConfig && (
+                        <button
+                          type="button"
+                          onClick={() => setShowApiConfig(true)}
+                          className="px-2 py-0.5 text-[10px] uppercase font-mono bg-error/10 hover:bg-error/20 border border-error/30 rounded text-error transition-colors"
+                        >
+                          Configure API
+                        </button>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* API Config Panel */}
+                {showApiConfig && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 rounded-lg bg-surface-container border border-primary-container/20 space-y-3"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-primary-fixed">API Connection Settings</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowApiConfig(false)}
+                        className="text-on-surface-variant hover:text-primary-container transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-sm">close</span>
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-on-surface-variant font-hanken">
+                      Unable to reach API server. Paste your Render backend URL below (must end with <code className="bg-surface-container-low px-1 py-0.5 rounded text-primary-fixed">/api</code>):
+                    </p>
+                    <div className="relative flex items-center border border-outline-variant/50 rounded-lg bg-surface-container-low">
+                      <span className="material-symbols-outlined text-on-surface-variant absolute left-3 text-sm">link</span>
+                      <input
+                        type="url"
+                        value={apiUrl}
+                        onChange={(e) => setApiUrl(e.target.value)}
+                        placeholder="https://your-api.onrender.com/api"
+                        className="w-full bg-transparent border-none text-on-surface font-hanken text-xs focus:ring-0 pl-10 pr-3 py-2"
+                      />
+                    </div>
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          localStorage.setItem('VITE_API_URL', apiUrl.trim());
+                          window.location.reload();
+                        }}
+                        className="px-3 py-1 text-[10px] uppercase tracking-wider font-mono bg-primary-container text-on-primary-container rounded-md hover:bg-primary-container/80 transition-colors"
+                      >
+                        Save & Retry
+                      </button>
+                    </div>
                   </motion.div>
                 )}
 

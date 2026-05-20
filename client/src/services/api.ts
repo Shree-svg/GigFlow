@@ -8,9 +8,12 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Attach JWT token to every request
+// Attach JWT token to every request and set baseURL dynamically
 api.interceptors.request.use(
   (config) => {
+    const savedApiUrl = localStorage.getItem('VITE_API_URL');
+    config.baseURL = savedApiUrl || import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+
     const token = localStorage.getItem('token');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
