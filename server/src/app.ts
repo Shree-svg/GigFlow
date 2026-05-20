@@ -18,7 +18,7 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173,ht
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.onrender.com')) {
         callback(null, true);
       } else {
         callback(new Error(`CORS: Origin ${origin} not allowed`));
