@@ -38,15 +38,12 @@ const UserSchema = new Schema<IUser, UserModel>(
   { timestamps: true }
 );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(UserSchema as any).pre('save', async function (this: UserDocumentType, next: () => void) {
+(UserSchema as any).pre('save', async function (this: UserDocumentType) {
   if (!this.isModified('password')) {
-    next();
     return;
   }
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password as string, salt);
-  next();
 });
 
 UserSchema.methods.comparePassword = async function (

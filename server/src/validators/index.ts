@@ -1,5 +1,5 @@
 import { body, query, param } from 'express-validator';
-import { LeadStatus, LeadSource } from '../types';
+import { LeadStatus, LeadSource, UserRole } from '../types';
 
 // ─── Auth Validators ──────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ export const registerValidator = [
 
   body('role')
     .optional()
-    .isIn(Object.values(LeadStatus))
+    .isIn(Object.values(UserRole))
     .withMessage('Invalid role'),
 ];
 

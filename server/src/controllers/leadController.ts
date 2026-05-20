@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import mongoose from 'mongoose';
 import Lead from '../models/Lead';
 import {
   AuthRequest,
@@ -86,9 +87,15 @@ export const getLeadById = asyncHandler(async (req: AuthRequest, res: Response) 
   }
 
   // Sales users can only view their own leads
+  type PopulatedCreatedBy = { _id: mongoose.Types.ObjectId; name: string; email: string };
+  const createdBy = lead.createdBy as PopulatedCreatedBy | mongoose.Types.ObjectId;
+  const creatorId =
+    createdBy && typeof createdBy === 'object' && '_id' in createdBy
+      ? (createdBy as PopulatedCreatedBy)._id.toString()
+      : lead.createdBy?.toString();
   if (
     user.role === UserRole.SALES &&
-    lead.createdBy.toString() !== user._id
+    creatorId !== user._id
   ) {
     sendError(res, 'Access denied. You can only view your own leads.', 403);
     return;
@@ -203,7 +210,15 @@ export const exportLeadsCSV = asyncHandler(async (req: AuthRequest, res: Respons
 // ─── GET /api/leads/stats (Admin only) ───────────────────────────────────────
 
 export const getLeadStats = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const user = req.user!;
+  const filter: Record<string, mongoose.Types.ObjectId> = {};
+
+  if (user.role === UserRole.SALES) {
+    filter.createdBy = new mongoose.Types.ObjectId(user._id);
+  }
+
   const stats = await Lead.aggregate([
+    { $match: filter },
     {
       $group: {
         _id: '$status',
@@ -212,7 +227,7 @@ export const getLeadStats = asyncHandler(async (req: AuthRequest, res: Response)
     },
   ]);
 
-  const total = await Lead.countDocuments();
+  const total = await Lead.countDocuments(filter);
 
   const formattedStats = {
     total,

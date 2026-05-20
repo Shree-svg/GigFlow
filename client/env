@@ -1,0 +1,4 @@
+PORT=5000
+MONGO_URI=mongodb+srv://sharmashreedhar19_db_user:RWtashnczyidhH0g@smartlwads.fmctplv.mongodb.net/?appName=SmartLwads
+JWT_SECRET=bd5dbfc26c769fc86ead3dabe32d855304ded514acaadf08250788bbc14d30ce59b34488c70ff88c44313fc67a9e67204ae239e8724f6f46b9eac0f05af3789b
+NODE_ENV=development
