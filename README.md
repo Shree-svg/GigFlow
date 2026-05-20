@@ -69,6 +69,38 @@ router.get('/:id', getLeadById);                       // Custom ownership check
 
 ---
 
+## 📂 Monorepo Directory Architecture
+
+```text
+📦 GigFlow-repo
+├── 📂 client               # React SPA Frontend Client
+│   ├── 📂 src
+│   │   ├── 📂 components   # Reusable UI Components (Leads, Campaigns, Charts, UI)
+│   │   ├── 📂 context      # Auth and Navigation State Providers
+│   │   ├── 📂 pages        # Cyberpunk Page Terminals (Dashboard, Campaigns, Analytics)
+│   │   ├── 📂 services     # Dynamically Configured Axios Core API Client
+│   │   └── 📄 main.tsx     # Single Page App Bootloader
+│   ├── 📄 Dockerfile       # Nginx-based Multi-stage compilation config
+│   └── 📄 package.json     # Frontend dependencies & scripts
+│
+├── 📂 server               # Express TypeScript REST API Gateway
+│   ├── 📂 src
+│   │   ├── 📂 controllers  # Business Logic handlers (Leads, Auth, Exports)
+│   │   ├── 📂 middleware   # CORS filters, JWT verification, and RBAC rules
+│   │   ├── 📂 models       # Mongoose Schemas (Users, Leads, Campaigns)
+│   │   ├── 📂 routes       # Express routing endpoints
+│   │   ├── 📄 app.ts       # Express Application Setup (with CORS matching)
+│   │   └── 📄 seed.ts      # Automated evaluator and demo seeder setup
+│   └── 📄 package.json     # Server node dependencies & build configurations
+│
+├── 📄 docker-compose.yml   # Multi-tier containerization orchestrator
+├── 📄 LICENSE              # Open-Source MIT License
+└── 📄 README.md            # Live gateway portal and developer specification
+```
+
+---
+
+
 ## ⚡ Quick Start & Deployment Guide
 
 ### 🧬 Method A: Unified Docker Containerization
@@ -126,3 +158,19 @@ To bypass manual database configuration, the system seeds dedicated test credent
 * **💼 Local Sales Rep**:
   * **Email**: `sales@smartleads.com`
   * **Password**: `Password123`
+
+---
+
+## 📄 License & Open Source Permissions
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for complete details.
+
+```text
+Copyright (c) 2026 SmartLeads CRM Systems.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software.
+```
