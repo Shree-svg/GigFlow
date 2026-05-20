@@ -66,11 +66,11 @@ export const Card = ({ children, className = '' }: CardProps) => (
 
 // ─── Badge ────────────────────────────────────────────
 
-interface BadgeProps {
+interface StatusBadgeProps {
   status: LeadStatus;
 }
 
-export const Badge = ({ status }: BadgeProps) => {
+export const StatusBadge = ({ status }: StatusBadgeProps) => {
   const colors: Record<LeadStatus, string> = {
     New: 'bg-blue-500/20 text-blue-400',
     Contacted: 'bg-yellow-500/20 text-yellow-400',
@@ -87,41 +87,36 @@ export const Badge = ({ status }: BadgeProps) => {
   );
 };
 
-// ─── StatusBadge (alias used by LeadsTable) ───────────────────────────────────
+// ─── Spinner ───────────────────────────────────────────
 
-export const StatusBadge = Badge;
+interface SpinnerProps {
+  size?: number;
+  className?: string;
+}
 
-// ─── SkeletonRow ──────────────────────────────────────────────────────────────
+export const Spinner = ({ size = 24, className = '' }: SpinnerProps) => (
+  <div
+    className={`inline-block animate-spin rounded-full border-2 border-primary-container border-t-transparent ${className}`}
+    style={{ width: size, height: size }}
+  />
+);
 
-export const SkeletonRow = () => (
-  <tr className="border-b border-outline-variant/10 animate-pulse">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <td key={i} className="px-5 py-4">
-        <div className="h-4 rounded bg-zinc-700/50 w-3/4" />
+// ─── Skeleton Row ──────────────────────────────────────
+
+const skeletonWidths = ['w-36', 'w-24', 'w-20', 'w-28', 'w-16'];
+
+interface SkeletonRowProps {
+  widths?: string[];
+}
+
+export const SkeletonRow = ({ widths = skeletonWidths }: SkeletonRowProps) => (
+  <tr className="border-b border-outline-variant/10">
+    {widths.map((width, index) => (
+      <td key={index} className="px-5 py-4">
+        <div className={`h-3 ${width} bg-surface-variant/30 rounded animate-pulse`} />
       </td>
     ))}
   </tr>
-);
-
-// ─── Spinner ──────────────────────────────────────────────────────────────────
-
-export const Spinner = ({ size = 24 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    className="animate-spin text-cyan-500"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle
-      cx="12" cy="12" r="10"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeDasharray="31.4 15.7"
-    />
-  </svg>
 );
 
 // ─── Modal ────────────────────────────────────────────
@@ -152,16 +147,8 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
             onClick={(e) => e.stopPropagation()}
           >
             {title && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-700">
-                <h3 className="font-mono text-sm font-semibold text-on-surface tracking-wider uppercase">
-                  {title}
-                </h3>
-                <button
-                  onClick={onClose}
-                  className="text-on-surface-variant hover:text-on-surface transition-colors"
-                >
-                  <span className="material-symbols-outlined text-sm">close</span>
-                </button>
+              <div className="mb-4">
+                <h3 className="font-sora text-lg text-on-surface">{title}</h3>
               </div>
             )}
             {children}

@@ -60,6 +60,7 @@ export const useLeads = (filters: LeadFilters) => {
     }
   }, [JSON.stringify(filters)]); // eslint-disable-line
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { void fetch(); }, [fetch]);
 
   return { leads, pagination, isLoading, error, refetch: fetch };
@@ -69,10 +70,9 @@ export const useLeads = (filters: LeadFilters) => {
 
 export const useStats = () => {
   const [stats, setStats]       = useState<LeadStats | null>(null);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     leadsService.getStats()
       .then((res) => { if (res.data) setStats(res.data); })
       .catch(() => {/* non-admin gets 403, ignore */})
