@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lead, LeadFilters } from '../types';
+import type { Lead, LeadFilters } from '../types';
 import { useLeads, useStats, useDebounce } from '../hooks';
 import { useAuth } from '../context/AuthContext';
 import { leadsService } from '../services/leads.service';

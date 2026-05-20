@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { LeadStatus, LeadSource, LeadFilters } from '../../types';
+import type { LeadStatus, LeadSource, LeadFilters } from '../../types';
 
 interface FilterBarProps {
   filters: LeadFilters;

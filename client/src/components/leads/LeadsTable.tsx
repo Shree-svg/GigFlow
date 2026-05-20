@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lead, PaginationMeta } from '../../types';
+import type { Lead, PaginationMeta } from '../../types';
 import { StatusBadge, SkeletonRow, Button } from '../ui';
 import { leadsService } from '../../services/leads.service';
 

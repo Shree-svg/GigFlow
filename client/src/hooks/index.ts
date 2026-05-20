@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Lead, LeadFilters, PaginationMeta, LeadStats } from '../types';
+import type { Lead, LeadFilters, PaginationMeta, LeadStats } from '../types';
 import { leadsService } from '../services/leads.service';
 
 // ─── useDebounce ──────────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import api from './api';
-import { ApiResponse, Lead, LeadFilters, LeadFormData, LeadStats, PaginatedResponse } from '../types';
+import type { ApiResponse, Lead, LeadFilters, LeadFormData, LeadStats, PaginatedResponse } from '../types';
 
 export const leadsService = {
   async getLeads(filters: Partial<LeadFilters>) {

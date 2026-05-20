@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { LeadStats } from '../../types';
+import type { LeadStats } from '../../types';
 
 interface StatCardProps {
   label: string;

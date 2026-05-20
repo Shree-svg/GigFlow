@@ -1,6 +1,6 @@
-import { ReactNode, ButtonHTMLAttributes } from 'react';
+import type { ReactNode, ButtonHTMLAttributes } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LeadStatus } from '../../types';
+import type { LeadStatus } from '../../types';
 
 // ─── Button ─────────────────────────────────────────────
 
@@ -72,10 +72,10 @@ interface BadgeProps {
 
 export const Badge = ({ status }: BadgeProps) => {
   const colors: Record<LeadStatus, string> = {
-    new: 'bg-blue-500/20 text-blue-400',
-    contacted: 'bg-yellow-500/20 text-yellow-400',
-    qualified: 'bg-green-500/20 text-green-400',
-    lost: 'bg-red-500/20 text-red-400',
+    New: 'bg-blue-500/20 text-blue-400',
+    Contacted: 'bg-yellow-500/20 text-yellow-400',
+    Qualified: 'bg-green-500/20 text-green-400',
+    Lost: 'bg-red-500/20 text-red-400',
   };
 
   return (
@@ -87,18 +87,56 @@ export const Badge = ({ status }: BadgeProps) => {
   );
 };
 
+// ─── StatusBadge (alias used by LeadsTable) ───────────────────────────────────
+
+export const StatusBadge = Badge;
+
+// ─── SkeletonRow ──────────────────────────────────────────────────────────────
+
+export const SkeletonRow = () => (
+  <tr className="border-b border-outline-variant/10 animate-pulse">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <td key={i} className="px-5 py-4">
+        <div className="h-4 rounded bg-zinc-700/50 w-3/4" />
+      </td>
+    ))}
+  </tr>
+);
+
+// ─── Spinner ──────────────────────────────────────────────────────────────────
+
+export const Spinner = ({ size = 24 }: { size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    className="animate-spin text-cyan-500"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12" cy="12" r="10"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeDasharray="31.4 15.7"
+    />
+  </svg>
+);
+
 // ─── Modal ────────────────────────────────────────────
 
 interface ModalProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
+  title?: string;
   children: ReactNode;
 }
 
-export const Modal = ({ open, onClose, children }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   return (
     <AnimatePresence>
-      {open && (
+      {isOpen && (
         <motion.div
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
           initial={{ opacity: 0 }}
@@ -107,12 +145,25 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
           onClick={onClose}
         >
           <motion.div
-            className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 w-full max-w-lg"
+            className="bg-zinc-900 border border-zinc-700 rounded-xl w-full max-w-lg overflow-hidden"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
+            {title && (
+              <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-700">
+                <h3 className="font-mono text-sm font-semibold text-on-surface tracking-wider uppercase">
+                  {title}
+                </h3>
+                <button
+                  onClick={onClose}
+                  className="text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  <span className="material-symbols-outlined text-sm">close</span>
+                </button>
+              </div>
+            )}
             {children}
           </motion.div>
         </motion.div>
