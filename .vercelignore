@@ -1,9 +1,0 @@
-server
-docs
-.git
-.github
-render.yaml
-docker-compose.yml
-Dockerfile
-README.md
-.gitignore

@@ -24,8 +24,8 @@ router.use(protect);
 // GET  /api/leads/export/csv  → Admin only (must be before /:id)
 router.get('/export/csv', adminOnly, exportLeadsCSV);
 
-// GET  /api/leads/stats       → All authenticated users
-router.get('/stats', getLeadStats);
+// GET  /api/leads/stats       → Admin only
+router.get('/stats', adminOnly, getLeadStats);
 
 // GET  /api/leads             → All authenticated users
 router.get('/', leadsQueryValidator, validate, getLeads);
