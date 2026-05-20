@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { User } from '../types';
 import { authService } from '../services/auth.service';
@@ -21,7 +21,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [initialAuth] = useState(getInitialAuth);
   const [user, setUser] = useState<User | null>(initialAuth.user);
   const [token, setToken] = useState<string | null>(initialAuth.token);
-  const isLoading = false;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsLoading(false), 0);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const persist = (tok: string, usr: User) => {
     localStorage.setItem('token', tok);

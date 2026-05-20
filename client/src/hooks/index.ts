@@ -60,8 +60,10 @@ export const useLeads = (filters: LeadFilters) => {
     }
   }, [JSON.stringify(filters)]); // eslint-disable-line
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { void fetch(); }, [fetch]);
+  useEffect(() => {
+    const timeout = setTimeout(() => { void fetch(); }, 0);
+    return () => clearTimeout(timeout);
+  }, [fetch]);
 
   return { leads, pagination, isLoading, error, refetch: fetch };
 };
