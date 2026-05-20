@@ -105,9 +105,13 @@ export const Spinner = ({ size = 24, className = '' }: SpinnerProps) => (
 
 const skeletonWidths = ['w-36', 'w-24', 'w-20', 'w-28', 'w-16'];
 
-export const SkeletonRow = () => (
+interface SkeletonRowProps {
+  widths?: string[];
+}
+
+export const SkeletonRow = ({ widths = skeletonWidths }: SkeletonRowProps) => (
   <tr className="border-b border-outline-variant/10">
-    {skeletonWidths.map((width, index) => (
+    {widths.map((width, index) => (
       <td key={index} className="px-5 py-4">
         <div className={`h-3 ${width} bg-surface-variant/30 rounded animate-pulse`} />
       </td>

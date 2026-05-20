@@ -60,11 +60,8 @@ export const useLeads = (filters: LeadFilters) => {
     }
   }, [JSON.stringify(filters)]); // eslint-disable-line
 
-  useEffect(() => {
-    // Defer to avoid setState-in-effect lint while still fetching on mount.
-    const timeout = setTimeout(() => { void fetch(); }, 0);
-    return () => clearTimeout(timeout);
-  }, [fetch]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { void fetch(); }, [fetch]);
 
   return { leads, pagination, isLoading, error, refetch: fetch };
 };
