@@ -656,9 +656,27 @@ export const Campaigns = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="font-mono text-[9px] text-stone-400 dark:text-on-surface-variant font-bold uppercase block">
-                  Subject Line Sandbox
-                </label>
+                <div className="flex justify-between items-center">
+                  <label className="font-mono text-[9px] text-stone-400 dark:text-on-surface-variant font-bold uppercase block">
+                    Subject Line Sandbox
+                  </label>
+                  <div className="flex gap-1.5 mb-0.5">
+                    <button
+                      type="button"
+                      onClick={() => setAiSubject('Exclusive partnership opportunity for {{company}}')}
+                      className="px-1.5 py-0.5 text-[8px] font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 rounded font-bold uppercase tracking-wider transition-all"
+                    >
+                      High score
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAiSubject('FREE cash discount buy right now!')}
+                      className="px-1.5 py-0.5 text-[8px] font-mono bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 rounded font-bold uppercase tracking-wider transition-all"
+                    >
+                      Spam
+                    </button>
+                  </div>
+                </div>
                 <textarea
                   value={aiSubject || campaigns.find(c => c.id === selectedCampaignForAi)?.subject || ''}
                   onChange={(e) => setAiSubject(e.target.value)}
@@ -741,6 +759,24 @@ export const Campaigns = () => {
               </div>
 
               <form onSubmit={saveCampaign} className="space-y-4 z-10 relative">
+                {!isEditMode && (
+                  <motion.button
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    type="button"
+                    onClick={() => {
+                      setFormName('Q3 Partner Acquisition');
+                      setFormSubject('Exclusive integration partnership offer with {{company}}');
+                      setFormSegment('Enterprise SaaS Leads');
+                      setFormSteps(['Initial Hook', 'Value Pitch', 'Last Attempt']);
+                    }}
+                    className="w-full py-2 bg-primary-container/10 border border-primary-container/20 rounded-xl text-primary-fixed hover:bg-primary-container/20 text-[10px] font-mono tracking-wider uppercase transition-colors flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-sm">precision_manufacturing</span>
+                    Autofill Demo Campaign
+                  </motion.button>
+                )}
+
                 <div className="space-y-1">
                   <label className="font-mono text-[9px] text-stone-400 dark:text-on-surface-variant font-bold uppercase block">
                     Campaign Name

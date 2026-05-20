@@ -62,6 +62,28 @@ export const LeadForm = ({ lead, onSuccess, onCancel }: LeadFormProps) => {
 
   return (
     <div className="p-6 flex flex-col gap-5">
+      {/* Autofill Demo Lead */}
+      {!isEdit && (
+        <motion.button
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          type="button"
+          onClick={() => {
+            setForm({
+              name: 'Alexander Mercer',
+              email: 'alex.mercer@cybernet.io',
+              status: 'Qualified',
+              source: 'Website'
+            });
+            setErrors({});
+          }}
+          className="w-full py-2 bg-primary-container/10 border border-primary-container/20 rounded-lg text-primary-fixed hover:bg-primary-container/20 text-xs font-mono tracking-wider uppercase transition-colors flex items-center justify-center gap-2"
+        >
+          <span className="material-symbols-outlined text-sm">precision_manufacturing</span>
+          Autofill Demo Lead
+        </motion.button>
+      )}
+
       {/* Text fields */}
       {fields.map((f, i) => (
         <motion.div
