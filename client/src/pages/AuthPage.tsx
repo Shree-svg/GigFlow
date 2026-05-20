@@ -37,7 +37,7 @@ export const AuthPage = () => {
   const [showPass, setShowPass] = useState(false);
   const [showApiConfig, setShowApiConfig] = useState(false);
   const [apiUrl, setApiUrl] = useState(
-    localStorage.getItem('VITE_API_URL') || import.meta.env.VITE_API_URL || 'http://localhost:5001/api'
+    localStorage.getItem('VITE_API_URL') || import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://smart-leads-api-50yq.onrender.com/api' : 'http://localhost:5001/api')
   );
 
   const { login, register } = useAuth();

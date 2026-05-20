@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://smart-leads-api-50yq.onrender.com/api' : 'http://localhost:5001/api');
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -12,7 +12,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const savedApiUrl = localStorage.getItem('VITE_API_URL');
-    config.baseURL = savedApiUrl || import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+    config.baseURL = savedApiUrl || import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://smart-leads-api-50yq.onrender.com/api' : 'http://localhost:5001/api');
 
     const token = localStorage.getItem('token');
     if (token) config.headers.Authorization = `Bearer ${token}`;
