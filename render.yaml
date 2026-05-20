@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Render Deployment Configuration for Smart Leads
+# ═══════════════════════════════════════════════════════════════════════════════
+# This file configures the deployment of the Smart Leads application on Render.
+# 
+# Services:
+#   - smart-leads-api: Node.js backend API (runs on smart-leads-api.onrender.com)
+#   - smart-leads-web: React frontend (runs on smart-leads-web.onrender.com)
+#
+# Before deploying, set the following environment variables in Render:
+#   - MONGO_URI: MongoDB connection string
+#   - JWT_SECRET: Secret key for JWT token signing
+#
+# CORS Configuration:
+#   - For Render only: https://smart-leads-web.onrender.com
+#   - For Render + Vercel: https://smart-leads-web.onrender.com,https://smart-leads.vercel.app
+#   - For local + Render: http://localhost:5173,https://smart-leads-web.onrender.com
+#
+# Note: Update ALLOWED_ORIGINS and VITE_API_URL if service names change or for
+# staging/production environments.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+services:
+  # ─── Backend Service ─────────────────────────────────────────
+  - type: web
+    name: smart-leads-api
+    runtime: node
+    plan: free
+    buildCommand: cd server && npm install && npm run build
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: ALLOWED_ORIGINS
+        # ⚠️ Update this if the frontend service name changes or for new deployments
+        # Local dev: http://localhost:5173,http://localhost:3000
+        # Render only: https://smart-leads-web.onrender.com
+        # Render + Vercel: https://smart-leads-web.onrender.com,https://smart-leads.vercel.app
+        value: https://smart-leads-web.onrender.com
+
+  # ─── Frontend Service ────────────────────────────────────────
+  - type: web
+    name: smart-leads-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./client/Dockerfile
+    envVars:
+      - key: VITE_API_URL
+        # ⚠️ Update this if the backend service name changes
+        # This must be set BEFORE build (Vite embeds it in static files)
+        value: https://smart-leads-api.onrender.com/api
