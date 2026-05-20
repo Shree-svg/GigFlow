@@ -1,6 +1,23 @@
 # 🌌 LeadStream AI — Lumina Nexus CRM Terminal
 
+[![Production Demo](https://img.shields.io/badge/Production%20Demo-Live%20on%20Render-00f5ff?style=for-the-badge&logo=render&logoColor=white)](https://gigflow-web-oj7s.onrender.com)
+[![Backend API](https://img.shields.io/badge/Backend%20API-Online-32cd32?style=for-the-badge&logo=express&logoColor=white)](https://smart-leads-api-50yq.onrender.com/health)
+[![Stack](https://img.shields.io/badge/Tech%20Stack-MERN%20%2B%20TypeScript-blueviolet?style=for-the-badge)](https://github.com/Shree-svg/GigFlow)
+
 LeadStream AI is a state-of-the-art, high-fidelity CRM and automated outreach terminal built with a premium **cyberpunk dark-mode aesthetic** and a clean **emerald-cream light-mode switch**. Powered by the bespoke *Stitch AI Lumina Nexus* design guidelines, the dashboard delivers tactile micro-interactions, smooth bezier vector charts, live SVG sparklines, and a cognitive AI copy critique optimizer.
+
+---
+
+## 🚀 Live Demo & Production Gateways
+
+| Component | Production Endpoint | Status |
+| :--- | :--- | :---: |
+| 🌐 **Interactive Frontend Client** | [gigflow-web-oj7s.onrender.com](https://gigflow-web-oj7s.onrender.com) | [![Live](https://img.shields.io/badge/LIVE-00f5ff?style=flat-square)](#) |
+| ⚡ **Backend API Gateway** | [smart-leads-api-50yq.onrender.com](https://smart-leads-api-50yq.onrender.com) | [![Active](https://img.shields.io/badge/ACTIVE-32cd32?style=flat-square)](#) |
+| 🩺 **API Server Health Check** | [/health Diagnostic Check](https://smart-leads-api-50yq.onrender.com/health) | [![Online](https://img.shields.io/badge/ONLINE-success?style=flat-square)](#) |
+
+> [!TIP]
+> **🔌 Zero-Config Client-Side API Override**: If the frontend has trouble communicating with the API due to cold-starts on Render's free tier, click the **Settings Gear (⚙️)** in the top right of the Login page and verify the API endpoint is set to `https://smart-leads-api-50yq.onrender.com/api`!
 
 ---
 
