@@ -211,13 +211,14 @@ export const exportLeadsCSV = asyncHandler(async (req: AuthRequest, res: Respons
 
 export const getLeadStats = asyncHandler(async (req: AuthRequest, res: Response) => {
   const user = req.user!;
-  const filter: Record<string, mongoose.Types.ObjectId> = {};
+  const filter: Record<string, any> = {};
 
   if (user.role === UserRole.SALES) {
     filter.createdBy = new mongoose.Types.ObjectId(user._id);
   }
 
-  const stats = await Lead.aggregate([
+  // 1. Group by Status
+  const statusStats = await Lead.aggregate([
     { $match: filter },
     {
       $group: {
@@ -227,17 +228,61 @@ export const getLeadStats = asyncHandler(async (req: AuthRequest, res: Response)
     },
   ]);
 
+  // 2. Group by Source
+  const sourceStats = await Lead.aggregate([
+    { $match: filter },
+    {
+      $group: {
+        _id: '$source',
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // 3. Group by Month (Monthly Trend)
+  const monthlyStats = await Lead.aggregate([
+    { $match: filter },
+    {
+      $group: {
+        _id: {
+          year: { $year: '$createdAt' },
+          month: { $month: '$createdAt' },
+        },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { '_id.year': 1, '_id.month': 1 } },
+  ]);
+
   const total = await Lead.countDocuments(filter);
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthlyTrend = monthlyStats.map((item) => {
+    const monthIdx = item._id.month - 1;
+    const monthName = monthNames[monthIdx] || 'Jan';
+    return {
+      label: `${monthName} ${item._id.year}`,
+      count: item.count as number,
+    };
+  });
 
   const formattedStats = {
     total,
-    byStatus: stats.reduce(
+    byStatus: statusStats.reduce(
       (acc, curr) => {
         acc[curr._id as string] = curr.count as number;
         return acc;
       },
       {} as Record<string, number>
     ),
+    bySource: sourceStats.reduce(
+      (acc, curr) => {
+        acc[curr._id as string] = curr.count as number;
+        return acc;
+      },
+      {} as Record<string, number>
+    ),
+    monthlyTrend,
   };
 
   sendSuccess(res, formattedStats, 'Stats fetched successfully');

@@ -90,7 +90,7 @@ export const AuthPage = () => {
           </div>
 
           {/* Form area */}
-          <form onSubmit={handleSubmit} className="p-6">
+          <form onSubmit={handleSubmit} className="p-6 pb-2">
             <AnimatePresence mode="wait">
               <motion.div
                 key={isLogin ? 'login' : 'register'}
@@ -166,6 +166,28 @@ export const AuthPage = () => {
               </motion.div>
             </AnimatePresence>
           </form>
+
+          {/* Demo Credentials Auto-Fill */}
+          {isLogin && (
+            <div className="px-6 pb-4">
+              <div className="flex gap-2 justify-center">
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, email: 'admin@smartleads.com', password: 'Password123' })}
+                  className="px-3 py-1 text-[10px] uppercase tracking-wider font-mono bg-primary-container/10 border border-primary-container/20 rounded-md text-primary-fixed hover:bg-primary-container/20 transition-colors"
+                >
+                  Admin Login
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, email: 'sales@smartleads.com', password: 'Password123' })}
+                  className="px-3 py-1 text-[10px] uppercase tracking-wider font-mono bg-secondary-container/10 border border-secondary-container/20 rounded-md text-secondary-fixed hover:bg-secondary-container/20 transition-colors"
+                >
+                  Sales Login
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Footer toggle */}
           <div className="px-6 py-4 bg-surface-container-low border-t border-primary-container/10 text-center">

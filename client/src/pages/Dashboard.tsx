@@ -4,8 +4,7 @@ import type { Lead, LeadFilters } from '../types';
 import { useLeads, useStats, useDebounce } from '../hooks';
 import { useAuth } from '../context/AuthContext';
 import { leadsService } from '../services/leads.service';
-import { Sidebar } from '../components/layout/Sidebar';
-import { Navbar } from '../components/layout/Navbar';
+import { useOutletContext } from 'react-router-dom';
 import { StatsRow } from '../components/leads/StatsRow';
 import { FilterBar } from '../components/leads/FilterBar';
 import { LeadsTable } from '../components/leads/LeadsTable';
@@ -18,7 +17,7 @@ export const Dashboard = () => {
   const { isAdmin } = useAuth();
 
   // Search with debounce
-  const [rawSearch, setRawSearch] = useState('');
+  const { search: rawSearch } = useOutletContext<{ search: string }>();
   const search = useDebounce(rawSearch, 300);
 
   // Filters
@@ -53,17 +52,8 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background bg-grid-pattern flex">
-      {/* Sidebar */}
-      <Sidebar onNewLead={openCreate} />
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col" style={{ marginLeft: 72 }}>
-        {/* Navbar */}
-        <Navbar search={rawSearch} onSearch={setRawSearch} />
-
-        {/* Page canvas */}
-        <main className="flex-1 overflow-y-auto p-5 space-y-5 max-w-7xl w-full mx-auto">
+    <>
+      <main className="p-5 space-y-5 max-w-7xl w-full mx-auto">
 
           {/* Page header */}
           <motion.div
@@ -107,7 +97,7 @@ export const Dashboard = () => {
               className="p-4 rounded-lg bg-error-container/20 border border-error/30 text-error font-hanken text-sm flex items-center gap-2"
             >
               <span className="material-symbols-outlined text-sm">error</span>
-              {error} — Check that your backend is running on port 5000.
+              {error} — Check that your backend is running on port 5001.
             </motion.div>
           )}
 
@@ -122,8 +112,6 @@ export const Dashboard = () => {
             onPageChange={(page) => updateFilters({ page })}
           />
         </main>
-      </div>
-
       {/* Create / Edit Modal */}
       <Modal
         isOpen={modalOpen}
@@ -136,6 +124,6 @@ export const Dashboard = () => {
           onCancel={closeModal}
         />
       </Modal>
-    </div>
+    </>
   );
 };

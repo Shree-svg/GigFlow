@@ -78,4 +78,7 @@ export interface LeadFilters {
 export interface LeadStats {
   total: number;
   byStatus: Record<LeadStatus, number>;
+  bySource: Record<LeadSource, number>;
+  monthlyTrend: { label: string; count: number }[];
 }
+
