@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lead, LeadFormData, LeadSource, LeadStatus } from '../../types';
+import type { Lead, LeadFormData, LeadSource, LeadStatus } from '../../types';
 import { leadsService } from '../../services/leads.service';
 import { Button } from '../ui';
 

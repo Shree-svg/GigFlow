@@ -1,6 +1,6 @@
-import { ReactNode, ButtonHTMLAttributes } from 'react';
+import type { ReactNode, ButtonHTMLAttributes } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LeadStatus } from '../../types';
+import type { LeadStatus } from '../../types';
 
 // ─── Button ─────────────────────────────────────────────
 
@@ -66,16 +66,16 @@ export const Card = ({ children, className = '' }: CardProps) => (
 
 // ─── Badge ────────────────────────────────────────────
 
-interface BadgeProps {
+interface StatusBadgeProps {
   status: LeadStatus;
 }
 
-export const Badge = ({ status }: BadgeProps) => {
+export const StatusBadge = ({ status }: StatusBadgeProps) => {
   const colors: Record<LeadStatus, string> = {
-    new: 'bg-blue-500/20 text-blue-400',
-    contacted: 'bg-yellow-500/20 text-yellow-400',
-    qualified: 'bg-green-500/20 text-green-400',
-    lost: 'bg-red-500/20 text-red-400',
+    New: 'bg-blue-500/20 text-blue-400',
+    Contacted: 'bg-yellow-500/20 text-yellow-400',
+    Qualified: 'bg-green-500/20 text-green-400',
+    Lost: 'bg-red-500/20 text-red-400',
   };
 
   return (
@@ -87,18 +87,47 @@ export const Badge = ({ status }: BadgeProps) => {
   );
 };
 
+// ─── Spinner ───────────────────────────────────────────
+
+interface SpinnerProps {
+  size?: number;
+  className?: string;
+}
+
+export const Spinner = ({ size = 24, className = '' }: SpinnerProps) => (
+  <div
+    className={`inline-block animate-spin rounded-full border-2 border-primary-container border-t-transparent ${className}`}
+    style={{ width: size, height: size }}
+  />
+);
+
+// ─── Skeleton Row ──────────────────────────────────────
+
+const skeletonWidths = ['w-36', 'w-24', 'w-20', 'w-28', 'w-16'];
+
+export const SkeletonRow = () => (
+  <tr className="border-b border-outline-variant/10">
+    {skeletonWidths.map((width, index) => (
+      <td key={width + index} className="px-5 py-4">
+        <div className={`h-3 ${width} bg-surface-variant/30 rounded animate-pulse`} />
+      </td>
+    ))}
+  </tr>
+);
+
 // ─── Modal ────────────────────────────────────────────
 
 interface ModalProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
+  title?: string;
   children: ReactNode;
 }
 
-export const Modal = ({ open, onClose, children }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   return (
     <AnimatePresence>
-      {open && (
+      {isOpen && (
         <motion.div
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
           initial={{ opacity: 0 }}
@@ -113,6 +142,11 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
+            {title && (
+              <div className="mb-4">
+                <h3 className="font-sora text-lg text-on-surface">{title}</h3>
+              </div>
+            )}
             {children}
           </motion.div>
         </motion.div>
