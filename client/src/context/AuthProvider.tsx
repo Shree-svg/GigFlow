@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Defer to avoid setState-in-effect lint while settling initial auth state.
     const timeout = setTimeout(() => setIsLoading(false), 0);
     return () => clearTimeout(timeout);
   }, []);

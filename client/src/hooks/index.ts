@@ -61,6 +61,7 @@ export const useLeads = (filters: LeadFilters) => {
   }, [JSON.stringify(filters)]); // eslint-disable-line
 
   useEffect(() => {
+    // Defer to avoid setState-in-effect lint while still fetching on mount.
     const timeout = setTimeout(() => { void fetch(); }, 0);
     return () => clearTimeout(timeout);
   }, [fetch]);
